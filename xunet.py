@@ -150,39 +150,6 @@ class ResnetBlock(torch.nn.Module):
             
         return self.updown((h+ h_in) / np.sqrt(2))
     
-# class AttnLayer(torch.nn.Module):
-    
-#     def __init__(self, attn_heads=4, in_channels=32):
-#         super().__init__()
-        
-#         self.attn_heads = 4
-#         hidden_dim = attn_heads * in_channels
-#         self.q = torch.nn.Conv1d(in_channels, hidden_dim, 1)
-#         self.kv = torch.nn.Conv1d(in_channels, hidden_dim*2, 1)
-        
-#     def forward(self, q, kv):
-        
-#         assert len(q.shape) == 3, "make sure the size if [B, C, H*W]"
-#         assert len(kv.shape) == 3, "make sure the size if [B, C, H*W]"
-        
-#         C = q.shape[-2]
-        
-#         q = self.q(q)
-#         k, v = self.kv(kv).chunk(2, dim=1)
-#         q, k, v = map(
-#             lambda t:  rearrange(t, "b (h c) x -> b h c x", h=self.attn_heads), [q,k,v]
-#         )
-        
-#         sim = torch.einsum("b h d i, b h d j -> b h i j", q, k)
-#         sim = sim - sim.amax(dim=-1, keepdim=True).detach()
-#         attn = sim.softmax(dim=-1)
-
-#         out = torch.einsum("b h i j, b h d j -> b h i d", attn, v)
-#         out = rearrange(out, "b h x d -> b h d x")
-        
-#         return out
-    
-    
 class AttnLayer(torch.nn.Module):
     
     def __init__(self, attn_heads=4, in_channels=32):
@@ -207,24 +174,6 @@ class AttnLayer(torch.nn.Module):
         out = self.attn(q, kv, kv)[0]
         
         return rearrange(out, "b l c -> b c l")
-        
-#         C = q.shape[-2]
-        
-#         q = self.q(q)
-#         k, v = self.kv(kv).chunk(2, dim=1)
-#         q, k, v = map(
-#             lambda t:  rearrange(t, "b (h c) x -> b h c x", h=self.attn_heads), [q,k,v]
-#         )
-        
-#         sim = torch.einsum("b h d i, b h d j -> b h i j", q, k)
-#         sim = sim - sim.amax(dim=-1, keepdim=True).detach()
-#         attn = sim.softmax(dim=-1)
-
-#         out = torch.einsum("b h i j, b h d j -> b h i d", attn, v)
-#         out = rearrange(out, "b h x d -> b h d x")
-        
-#         return out
-    
     
 class AttnBlock(torch.nn.Module):
     
@@ -349,14 +298,6 @@ class ConditioningProcessor(torch.nn.Module):
         self.convs = torch.nn.ModuleList(convs)
         
     def forward(self, batch, cond_mask):
-        # batch = {
-        #     "z",  # noisy input image (HxWx3 tensor)
-        #     "x",  # conditioning view (HxWx3 tensor)
-        #     "logsnr",  # log signal-to-noise ratio of noisy image (scalar)
-        #     "t",  # camera positions (two 3d vectors)
-        #     "R",  # camera rotations (two 3x3 matrices)
-        #     "K",  # camera intrinsics (a.k.a. calibration matrix) (3x3 matrix)
-        # }
         
         B, C, H, W = batch['x'].shape
         
@@ -533,15 +474,6 @@ class XUNet(torch.nn.Module):
         
     
     def forward(self, batch, *, cond_mask):
-        
-        # batch = {
-        #     "z",  # noisy input image (HxWx3 tensor)
-        #     "x",  # conditioning view (HxWx3 tensor)
-        #     "logsnr",  # log signal-to-noise ratio of noisy image (scalar)
-        #     "t",  # camera positions (two 3d vectors)
-        #     "R",  # camera rotations (two 3x3 matrices)
-        #     "K",  # camera intrinsics (a.k.a. calibration matrix) (3x3 matrix)
-        # }
         
         B, C, H, W = batch['x'].shape
         
