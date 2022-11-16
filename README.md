@@ -14,6 +14,10 @@ As the JAX code given by the authors are not runnable, we fixed the original cod
 
 The PyTorch implementation is in [xunet.py](xunet.py). Feel free to put up an issue if the implementation is not consistent with the original JAX code. 
 
+## GPU requirement
+
+We have testing 8 x RTX3090 with batch size of 128 and image size of 64 x 64. Due to the memory constraints we were not able to test the original authors' configuration of image size 128 x 128.
+
 ## TODO:
 1. add trained model
 
