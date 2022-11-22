@@ -170,12 +170,12 @@ def warmup(optimizer, step, last_step, last_lr):
 
 import argparse
 parser = argparse.ArgumentParser()
-parser.add_argument('transfer',type=str, default="")
+parser.add_argument('--transfer',type=str, default="")
 args = parser.parse_args()
 
 
 if args.transfer == "":
-    now = './results/shapenet_SRN_car/'+"original_"+str(int(time.time()))
+    now = './results/shapenet_SRN_car/'+str(int(time.time()))
     writer = SummaryWriter(now)
     step = 0
 else:
