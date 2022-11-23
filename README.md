@@ -1,6 +1,6 @@
 # Novel View Synthesis with Diffusion Models
 
-Unofficial PyTorch Implementation of [Novel View Synthesis with Diffusion Models](3d-diffusion.github.io).
+Unofficial PyTorch Implementation of [Novel View Synthesis with Diffusion Models](https://3d-diffusion.github.io/).
 
 ## Changes:
 
